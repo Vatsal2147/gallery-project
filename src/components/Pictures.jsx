@@ -3,7 +3,7 @@ import React from 'react'
 function Pictures(props) {
    
   return (
-    <div>
+    <div>  
       <a href={props.elem.url}>
               <div className='h-40 w-44 bg-white rounded-xl overflow-hidden'>
             <img className = 'h-full w-full object-cover rounded-xl'src={props.elem.download_url}></img>

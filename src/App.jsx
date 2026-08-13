@@ -5,26 +5,47 @@ import {useEffect} from 'react'
 import Pictures from './components/Pictures'
 
 function App() {
+  const [error, setError] = useState(false)
   const [userData, setUserData] = useState([])
   const [index, setIndex] = useState(1)
-  const getData= async()=>{
-    const response = await axios.get(`https://picsum.photos/v2/list?page=${index}&limit=18`)
-    setUserData(response.data);
-    console.log(userData)
- }
+  const getData = async () => {
+  try {
+    const response = await axios.get(
+      `https://picsum.photos/v2/list?page=${index}&limit=18`
+    )
+
+    setUserData(response.data)
+    setError(false)
+  } catch (err) {
+    setError(true)
+  }
+}
 
       useEffect(function(){
         getData();
       },[index])
 
-      let printUserData = <h3 className='text-gray-400 text-xl absolute top-1/2 left-1/2'>Loading....</h3>
-      if(userData.length>0){
-        printUserData=userData.map(function(elem, idx){
-          return <div key={idx} target='_blank' >
-            <Pictures elem={elem} />
-          </div>
-        })
-      }
+      let printUserData = (
+  <h3 className='text-gray-400 text-xl absolute top-1/2 left-1/2'>
+    Loading....
+  </h3>
+)
+
+if (error) {
+  printUserData = (
+    <h3 className='text-red-400 text-xl'>
+      Failed to load photos
+    </h3>
+  )
+} else if (userData.length > 0) {
+  printUserData = userData.map(function(elem, idx) {
+    return (
+      <div key={idx}>
+        <Pictures elem={elem} />
+      </div>
+    )
+  })
+}
 
   return (
     <div className="bg-black h-screen w-full overflow-auto p-4 text-white flex flex-col">
